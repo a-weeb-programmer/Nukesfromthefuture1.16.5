@@ -1,5 +1,7 @@
 package net.nukesfromthefuture.main;
 
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.io.WritingMode;
 import com.mojang.datafixers.types.Type;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -9,12 +11,16 @@ import net.minecraft.item.*;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Util;
 import net.minecraft.util.datafix.TypeReferences;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ObjectHolder;
@@ -31,6 +37,11 @@ import net.nukesfromthefuture.tabs.UselessTab;
 import net.nukesfromthefuture.items.POTATO;
 import net.nukesfromthefuture.tabs.Weapons;
 import net.nukesfromthefuture.tileentity.TileEgoNuke;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.File;
 
 @Mod("nff")
 public class Nukesfromthefuture {
@@ -50,10 +61,32 @@ public class Nukesfromthefuture {
     public static Item iLead_glass;
     public static Item iEgo_nuke;
     public static Item iEgonium_ore;
-    //tile entity types
+    //tile entity types.... WHY FORGE!!! WHAT WAS SO WRONG WITH REGISTERING TILE ENTITIES USING THE GAME REGISTRY!?
     @ObjectHolder("nff:ego_thing")
     public static TileEntityType<TileEgoNuke> ego_type;
+    //config values
+    public static ForgeConfigSpec.BooleanValue model_render;
+    //logger
+    public static Logger logger = LogManager.getLogger();
+    //config
+    public static ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+    public static ForgeConfigSpec config;
+
+    static{
+        model_render = builder.comment("This tells the game whether to render the blocks equipped with 3d models to also render the models in the inventory or not").define("render_model", true);
+        config = builder.build();
+    }
+    public static void loadConfigStuff(ForgeConfigSpec configThing, String path){
+        Nukesfromthefuture.logger.log(Level.INFO, "Loading config file");
+        final CommentedFileConfig file = CommentedFileConfig.builder(new File(path)).sync().autosave().writingMode(WritingMode.REPLACE).build();
+        file.load();
+        config.setConfig(file);
+    }
+
     public Nukesfromthefuture(){
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, config);
+        loadConfigStuff(config, FMLPaths.CONFIGDIR.get().resolve("nukesfromthefuture.toml").toString());
+        config.save();
         UwU = new Item(new Item.Properties().group(stuff)).setRegistryName("owo");
         trol = new TrollBlock(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(0.3F, 0F)).setRegistryName("trol");
         iTrol = new BlockItem(trol, new Item.Properties().group(stuff)).setRegistryName("trol");
@@ -63,7 +96,7 @@ public class Nukesfromthefuture {
         lead_glass = new LeadGlass(AbstractBlock.Properties.create(Material.GLASS).hardnessAndResistance(5.0F, 6.0F).notSolid().noDrops()).setRegistryName("lead_glass");
         iLead_glass = new BlockItem(lead_glass, new Item.Properties().group(stuff)).setRegistryName("lead_glass");
         ego_nuke = new EgoNuke(Block.Properties.create(Material.IRON).notSolid().hardnessAndResistance(3.0F, 1F)).setRegistryName("ego_nuke");
-        iEgo_nuke = new BlockItem(ego_nuke, new Item.Properties().group(weapons)).setRegistryName("ego_nuke");
+        iEgo_nuke = new BlockItem(ego_nuke, new Item.Properties().group(weapons)).setRegistryName(model_render.get() ? "ego_nuke" : "ego_simple");
         lead_ingot = new Lead_Ingot(new Item.Properties().group(resources)).setRegistryName("lead_ingot");
         egonium_ore = new EgoniumOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(6.0F, 2.0F).sound(SoundType.STONE)).setRegistryName("ego_ore");
         iEgonium_ore = new BlockItem(egonium_ore, new Item.Properties().group(resources)).setRegistryName("ego_ore");
