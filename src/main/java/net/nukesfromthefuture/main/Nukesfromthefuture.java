@@ -7,6 +7,7 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.*;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Util;
@@ -28,6 +29,7 @@ import net.nukesfromthefuture.blocks.EgoNuke;
 import net.nukesfromthefuture.blocks.EgoniumOre;
 import net.nukesfromthefuture.blocks.LeadGlass;
 import net.nukesfromthefuture.blocks.TrollBlock;
+import net.nukesfromthefuture.entity.EntityEgoBlast;
 import net.nukesfromthefuture.items.CookedPotato;
 import net.nukesfromthefuture.items.Lead_Ingot;
 import net.nukesfromthefuture.items.Pizza;
@@ -64,8 +66,13 @@ public class Nukesfromthefuture {
     //tile entity types.... WHY FORGE!!! WHAT WAS SO WRONG WITH REGISTERING TILE ENTITIES USING THE GAME REGISTRY!?
     @ObjectHolder("nff:ego_thing")
     public static TileEntityType<TileEgoNuke> ego_type;
+    //entity types
+    @ObjectHolder("nff:ego_explod")
+    public static EntityType<EntityEgoBlast> ego_explod;
     //config values
-    public static ForgeConfigSpec.BooleanValue model_render;
+    public static ForgeConfigSpec.BooleanValue elevation;
+    public static ForgeConfigSpec.IntValue egoNukeSpeed;
+    public static ForgeConfigSpec.IntValue egoStrength;
     //logger
     public static Logger logger = LogManager.getLogger();
     //config
@@ -73,7 +80,9 @@ public class Nukesfromthefuture {
     public static ForgeConfigSpec config;
 
     static{
-        model_render = builder.comment("This tells the game whether to render the blocks equipped with 3d models to also render the models in the inventory or not").define("render_model", true);
+        egoStrength = builder.defineInRange("ego_nuke_strength", 300, 1, 1000);
+        elevation = builder.define("elevation", true);
+        egoNukeSpeed = builder.defineInRange("ego_nuke_speed", 9, 1, 40);
         config = builder.build();
     }
     public static void loadConfigStuff(ForgeConfigSpec configThing, String path){
@@ -96,7 +105,7 @@ public class Nukesfromthefuture {
         lead_glass = new LeadGlass(AbstractBlock.Properties.create(Material.GLASS).hardnessAndResistance(5.0F, 6.0F).notSolid().noDrops()).setRegistryName("lead_glass");
         iLead_glass = new BlockItem(lead_glass, new Item.Properties().group(stuff)).setRegistryName("lead_glass");
         ego_nuke = new EgoNuke(Block.Properties.create(Material.IRON).notSolid().hardnessAndResistance(3.0F, 1F)).setRegistryName("ego_nuke");
-        iEgo_nuke = new BlockItem(ego_nuke, new Item.Properties().group(weapons)).setRegistryName(model_render.get() ? "ego_nuke" : "ego_simple");
+        iEgo_nuke = new BlockItem(ego_nuke, new Item.Properties().group(weapons)).setRegistryName("ego_nuke");
         lead_ingot = new Lead_Ingot(new Item.Properties().group(resources)).setRegistryName("lead_ingot");
         egonium_ore = new EgoniumOre(Block.Properties.create(Material.ROCK).hardnessAndResistance(6.0F, 2.0F).sound(SoundType.STONE)).setRegistryName("ego_ore");
         iEgonium_ore = new BlockItem(egonium_ore, new Item.Properties().group(resources)).setRegistryName("ego_ore");
