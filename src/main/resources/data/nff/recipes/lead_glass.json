@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+    "lll",
+    "lgl",
+    "lll"
+    ],
+    "key": {
+    "l": {
+        "item": "nff:lead_ingot"
+        },
+    "g": {
+        "item": "minecraft:glass"
+        }
+    },
+    "result": {
+        "item": "nff:lead_glass",
+        "count": 1
+    }
+}

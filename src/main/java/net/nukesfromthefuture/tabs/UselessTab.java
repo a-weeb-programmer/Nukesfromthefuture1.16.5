@@ -12,6 +12,6 @@ public class UselessTab extends ItemGroup {
     }
     @Override
     public ItemStack createIcon() {
-        return new ItemStack(Nukesfromthefuture.UwU);
+        return new ItemStack(Nukesfromthefuture.iTrol);
     }
 }

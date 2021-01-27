@@ -1,0 +1,10 @@
+{
+  "_comment": "what the hell is this!?",
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "nff:potatoe"
+  },
+  "result": "nff:cooked_potatoe",
+  "experience": 0.6,
+  "cookingtime": 200
+}
