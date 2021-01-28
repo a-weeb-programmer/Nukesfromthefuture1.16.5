@@ -77,9 +77,9 @@ public class EntityEgoBlast extends Entity {
 
         if (world.rand.nextInt(10) == 0)
         {
-            world.playSound(this.getPosX(), this.getPosY(), this.getPosZ(), new SoundEvent(new ResourceLocation("ambient.weather.thunder")), SoundCategory.AMBIENT, 10.0F, 0.50F, false);
+            world.playSound(this.getPosX(), this.getPosY(), this.getPosZ(), new SoundEvent(new ResourceLocation("ambient.weather.thunder")), SoundCategory.WEATHER, 10.0F, 0.50F, false);
             if(rand.nextInt(5) == 0)
-                this.world.playSound(this.getPosX(), this.getPosY(), this.getPosZ(), new SoundEvent(new ResourceLocation("random.explode")), SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F, false);
+                this.world.playSound(this.getPosX(), this.getPosY(), this.getPosZ(), new SoundEvent(new ResourceLocation("random.explode")), SoundCategory.MASTER, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F, false);
         }
 
         ticksExisted++;

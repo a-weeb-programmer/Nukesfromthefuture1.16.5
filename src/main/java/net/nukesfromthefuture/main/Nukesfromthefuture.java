@@ -8,10 +8,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityType;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.*;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Util;
 import net.minecraft.util.datafix.TypeReferences;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -29,6 +31,7 @@ import net.nukesfromthefuture.blocks.EgoNuke;
 import net.nukesfromthefuture.blocks.EgoniumOre;
 import net.nukesfromthefuture.blocks.LeadGlass;
 import net.nukesfromthefuture.blocks.TrollBlock;
+import net.nukesfromthefuture.containers.EgoContainer;
 import net.nukesfromthefuture.entity.EntityEgoBlast;
 import net.nukesfromthefuture.items.CookedPotato;
 import net.nukesfromthefuture.items.Lead_Ingot;
@@ -69,6 +72,9 @@ public class Nukesfromthefuture {
     //entity types
     @ObjectHolder("nff:ego_explod")
     public static EntityType<EntityEgoBlast> ego_explod;
+    //container types. ik, I'm really unorganized cramming all the contents into the main mod class lol
+    @ObjectHolder("nff:ego_container")
+    public static ContainerType<EgoContainer> ego_container;
     //config values
     public static ForgeConfigSpec.BooleanValue elevation;
     public static ForgeConfigSpec.IntValue egoNukeSpeed;
@@ -78,7 +84,8 @@ public class Nukesfromthefuture {
     //config
     public static ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
     public static ForgeConfigSpec config;
-
+    //misc
+    public static World getWorld;
     static{
         egoStrength = builder.defineInRange("ego_nuke_strength", 300, 1, 1000);
         elevation = builder.define("elevation", true);

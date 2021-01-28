@@ -5,6 +5,7 @@ import com.electronwill.nightconfig.core.io.WritingMode;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.BlockModelRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -15,12 +16,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.BeaconTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
@@ -31,6 +35,7 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
@@ -40,7 +45,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.nukesfromthefuture.containers.EgoContainer;
 import net.nukesfromthefuture.entity.EntityEgoBlast;
+import net.nukesfromthefuture.guiscreens.EgoGuiScreen;
 import net.nukesfromthefuture.tileentity.TileEgoNuke;
 import org.apache.logging.log4j.Level;
 
@@ -82,6 +89,7 @@ public class ModEventHandler {
         System.out.println("client things or something, idk");
         RenderTypeLookup.setRenderLayer(Nukesfromthefuture.lead_glass, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(Nukesfromthefuture.ego_nuke, RenderType.getCutout());
+        ScreenManager.registerFactory(Nukesfromthefuture.ego_container, EgoGuiScreen::new);
     }
     @SubscribeEvent
     public static void serverStuff(FMLCommonSetupEvent event){
@@ -89,7 +97,15 @@ public class ModEventHandler {
     }
     @SubscribeEvent
     public static void entityThings(RegistryEvent.Register<EntityType<?>> event){
-        event.getRegistry().register(EntityType.Builder.create(EntityEgoBlast::new, EntityClassification.MISC).build("ego_explod").setRegistryName("ego_explod"));
+        event.getRegistry().register(EntityType.Builder.create(EntityEgoBlast::new, EntityClassification.MISC).build("nff:ego_explod").setRegistryName("ego_explod"));
+    }
+    @SubscribeEvent
+    public static void containerThings(RegistryEvent.Register<ContainerType<?>> event){
+        event.getRegistry().register(IForgeContainerType.create((windowId, inv, data) -> {
+            BlockPos pos = data.readBlockPos();
+            World world = inv.player.world;
+            return new EgoContainer(windowId, pos, world, inv, inv.player);
+        }).setRegistryName("ego_container"));
     }
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class Forge_bus {

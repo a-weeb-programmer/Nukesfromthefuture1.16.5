@@ -3,6 +3,7 @@ package net.nukesfromthefuture.explosion;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.nukesfromthefuture.entity.EntityEgoBlast;
@@ -53,7 +54,7 @@ public class EgoExplosion {
                     for (int Y = 70; Y > 0; Y--)
                     {
                         BlockState block = worldObj.getBlockState(new BlockPos(X + posX, Y, Z + posZ));
-                        if (block == Blocks.WATER.getDefaultState() || block == Blocks.LAVA.getDefaultState())
+                        if (block == Blocks.WATER.getDefaultState() || block == Blocks.LAVA.getDefaultState() || block == Fluids.LAVA.getDefaultState().getBlockState() || block == Fluids.FLOWING_LAVA.getDefaultState().getBlockState() || block == Fluids.WATER.getDefaultState().getBlockState() || block == Fluids.FLOWING_WATER.getDefaultState().getBlockState())
                         {
                             worldObj.removeBlock(new BlockPos(X + posX, Y, Z + posZ), false);
                         }
@@ -150,7 +151,7 @@ public class EgoExplosion {
                 for (int Y = ylimit; Y > ylimit - treeHeight; Y--)
                 {
                     if (Y == 0) break;
-                    worldObj.setBlockState(new BlockPos(x + posX, Y, z + posZ), Nukesfromthefuture.trol.getDefaultState());
+                    worldObj.setBlockState(new BlockPos(x + posX, Y, z + posZ), Nukesfromthefuture.trol.getDefaultState(), metadata, 3);
                 }
             }
 
