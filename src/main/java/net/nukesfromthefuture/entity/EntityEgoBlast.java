@@ -6,23 +6,21 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.FallingBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.INetHandler;
 import net.minecraft.network.IPacket;
+import net.minecraft.network.play.server.SSpawnObjectPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.EntityPosWrapper;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.*;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.nukesfromthefuture.explosion.EgoExplosion;
 import net.nukesfromthefuture.main.Nukesfromthefuture;
 
@@ -60,8 +58,8 @@ public class EntityEgoBlast extends Entity {
         setPosition(x, y, z);
     }
 
-    public EntityEgoBlast(EntityType<Entity> entityEntityType, World world) {
-        super(Nukesfromthefuture.ego_explod, world);
+    public EntityEgoBlast(EntityType<? extends EntityEgoBlast> entityEntityType, World world) {
+        super(entityEntityType, world);
     }
 
 
@@ -71,15 +69,14 @@ public class EntityEgoBlast extends Entity {
     }
 
     @Override
-    public void tick()
-    {
+    public void tick() {
         super.tick();
 
         if (world.rand.nextInt(10) == 0)
         {
-            world.playSound(this.getPosX(), this.getPosY(), this.getPosZ(), new SoundEvent(new ResourceLocation("ambient.weather.thunder")), SoundCategory.WEATHER, 10.0F, 0.50F, false);
+            world.playSound((PlayerEntity) null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.AMBIENT, 10.0F, 0.50F);
             if(rand.nextInt(5) == 0)
-                this.world.playSound(this.getPosX(), this.getPosY(), this.getPosZ(), new SoundEvent(new ResourceLocation("random.explode")), SoundCategory.MASTER, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F, false);
+                this.world.playSound((PlayerEntity) null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.MASTER, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
         }
 
         ticksExisted++;
@@ -190,18 +187,11 @@ public class EntityEgoBlast extends Entity {
         nbt.putFloat("size", (float) lastTickPosX);
         nbt.putFloat("radius", (float) radis);
     }
-
     @Override
     public IPacket<?> createSpawnPacket() {
-        return null;
+        return new SSpawnObjectPacket(this);
     }
 
-
-    @Override
-    public float getBrightness()
-    {
-        return 1000F;
-    }
 
     @Override
     public boolean isInRangeToRenderDist(double par1)
@@ -209,11 +199,10 @@ public class EntityEgoBlast extends Entity {
         return true;
     }
 
-
-
     public EntityEgoBlast setTime()
     {
         ticksExisted = 920;
         return this;
     }
+
 }

@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "block/dirt",
+    "up": "nff:blocks/waste_top",
+    "north": "nff:blocks/waste_side",
+    "east": "nff:blocks/waste_side",
+    "south": "nff:blocks/waste_side",
+    "west": "nff:blocks/waste_side",
+    "down": "minecraft:block/dirt"
+  }
+}

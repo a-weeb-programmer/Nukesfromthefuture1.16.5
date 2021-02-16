@@ -1,0 +1,10 @@
+{
+  "parent": "block/cube_all",
+  "loader": "forge:obj",
+  "_comment": "My UV texture is probably Austrailian because forge thinks it's upside down. hahahaha... Yes, the unfunny jokes are spreading from the item tooltips to the code comments",
+  "flip-v": true,
+  "model": "nff:models/obj/beta.obj",
+  "textures": {
+    "particle": "nff:items/beta"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "nff:items/fluid_barrel",
+    "layer1": "nff:items/new_overlay"
+  }
+}

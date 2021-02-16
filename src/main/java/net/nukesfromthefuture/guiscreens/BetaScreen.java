@@ -3,23 +3,23 @@ package net.nukesfromthefuture.guiscreens;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.nukesfromthefuture.containers.EgoContainer;
-import net.nukesfromthefuture.main.Nukesfromthefuture;
+import net.nukesfromthefuture.containers.BetaContainer;
+import net.nukesfromthefuture.tileentity.TileBeta;
 
-public class EgoGuiScreen extends ContainerScreen<EgoContainer> {
-    public static ResourceLocation texture = new ResourceLocation(Nukesfromthefuture.mod_id, "textures/gui/ego_nuke.png");
-    public EgoGuiScreen(EgoContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+public class BetaScreen extends ContainerScreen<BetaContainer> {
+    public static ResourceLocation texture = new ResourceLocation("nff", "textures/gui/beta.png");
+    TileBeta UwU;
+    public BetaScreen(BetaContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
-        this.xSize = 178;
-        this.ySize = 179;
+        this.xSize = 175;
+        this.ySize = 165;
     }
 
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack);
+        renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
     }
@@ -27,11 +27,11 @@ public class EgoGuiScreen extends ContainerScreen<EgoContainer> {
     @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
         minecraft.getTextureManager().bindTexture(texture);
-        this.blit(matrixStack, guiLeft, guiTop,0, 0, xSize, ySize);
+        this.blit(matrixStack, guiLeft, guiTop, 0, 0, xSize, ySize);
     }
-    //I know it already does it for me, but I DON'T WANT THE WORD "INVENTORY" ABOVE MY INVENTORY BECAUSE THE TEXT INTERSECTS THE PICTURE
+
     @Override
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
-        this.font.drawString(matrixStack, this.title.getString(), this.xSize / 2 - font.getStringWidth(this.title.getString()) / 2, 3, 404040);
+        this.font.drawString(matrixStack, this.title.getString(), this.xSize / 2 - font.getStringWidth(this.title.getString()) / 2, 5, 4210752);
     }
 }

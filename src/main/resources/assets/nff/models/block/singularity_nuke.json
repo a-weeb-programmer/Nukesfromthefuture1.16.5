@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_all",
+  "loader": "forge:obj",
+  "model": "nff:models/obj/singularity_nuke.obj",
+  "flip-v": true,
+  "textures": {
+    "particle": "nff:items/singularity_nuke"
+  }
+}

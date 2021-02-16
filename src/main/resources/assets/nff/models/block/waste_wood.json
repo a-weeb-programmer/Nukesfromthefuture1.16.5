@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "nff:blocks/waste_trunk_top",
+    "up": "nff:blocks/waste_trunk_top",
+    "down": "nff:blocks/waste_trunk_top",
+    "north": "nff:blocks/waste_trunk",
+    "east": "nff:blocks/waste_trunk",
+    "south": "nff:blocks/waste_trunk",
+    "west": "nff:blocks/waste_trunk"
+  }
+}

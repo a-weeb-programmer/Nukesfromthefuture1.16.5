@@ -57,13 +57,24 @@ public class TileEgoNuke extends TileEntity implements ISidedInventory, INamedCo
 
             @Override
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                return stack.getItem() == Items.DIAMOND;
+                if(slot == 0) {
+                    return stack.getItem() == Nukesfromthefuture.ego_ingot;
+                } else if(slot == 1){
+                    return stack.getItem() == Nukesfromthefuture.lead_ingot;
+                } else if(slot == 2){
+                    return stack.getItem() == Nukesfromthefuture.POTATO;
+                }
+                return false;
             }
 
             @Nonnull
             @Override
             public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-                if (stack.getItem() != Items.DIAMOND) {
+                if (slot == 0 && stack.getItem() != Nukesfromthefuture.ego_ingot) {
+                    return stack;
+                }  else if(slot == 1 && stack.getItem() != Nukesfromthefuture.lead_ingot){
+                    return stack;
+                } else if(slot == 2 && stack.getItem() != Nukesfromthefuture.POTATO){
                     return stack;
                 }
                 return super.insertItem(slot, stack, simulate);
@@ -138,7 +149,11 @@ public class TileEgoNuke extends TileEntity implements ISidedInventory, INamedCo
             return null;
         }
     }
-
+    public boolean isReady(){
+        if(itemHandler.getStackInSlot(0).getItem() == Nukesfromthefuture.ego_ingot && itemHandler.getStackInSlot(1).getItem() == Nukesfromthefuture.lead_ingot && itemHandler.getStackInSlot(2).getItem() == Nukesfromthefuture.POTATO)
+            return true;
+        return false;
+    }
     @Override
     public ItemStack removeStackFromSlot(int index) {
         return slots[index];

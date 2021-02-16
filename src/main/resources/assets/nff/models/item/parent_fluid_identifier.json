@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "nff:items/fluid_identifier",
+    "layer1": "nff:items/fluid_identifier_overlay"
+  }
+}

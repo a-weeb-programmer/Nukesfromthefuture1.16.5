@@ -3,6 +3,7 @@ package net.nukesfromthefuture.explosion;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -53,10 +54,11 @@ public class EgoExplosion {
                 {
                     for (int Y = 70; Y > 0; Y--)
                     {
+                        FluidState fluid = worldObj.getFluidState(new BlockPos(X + posX, Y, Z + posZ));
                         BlockState block = worldObj.getBlockState(new BlockPos(X + posX, Y, Z + posZ));
-                        if (block == Blocks.WATER.getDefaultState() || block == Blocks.LAVA.getDefaultState() || block == Fluids.LAVA.getDefaultState().getBlockState() || block == Fluids.FLOWING_LAVA.getDefaultState().getBlockState() || block == Fluids.WATER.getDefaultState().getBlockState() || block == Fluids.FLOWING_WATER.getDefaultState().getBlockState())
+                        if (block == Blocks.WATER.getDefaultState() || block == Blocks.LAVA.getDefaultState() || fluid != Fluids.EMPTY.getDefaultState() || block == Blocks.SEAGRASS.getDefaultState() || block == Blocks.TALL_SEAGRASS.getDefaultState() || block == Blocks.KELP.getDefaultState() || block == Blocks.KELP_PLANT.getDefaultState())
                         {
-                            worldObj.removeBlock(new BlockPos(X + posX, Y, Z + posZ), false);
+                            worldObj.setBlockState(new BlockPos(X + posX, Y, Z + posZ), Blocks.AIR.getDefaultState());
                         }
                     }
                 }
@@ -114,7 +116,12 @@ public class EgoExplosion {
             {
                 if (Y == 0) break;
                 BlockState block = worldObj.getBlockState(new BlockPos(x + posX, Y, z + posZ));
+                FluidState fluid = worldObj.getFluidState(new BlockPos(x + posX, Y, z + posZ));
                 worldObj.setBlockState(new BlockPos(x + posX, Y, z + posZ), Blocks.AIR.getDefaultState());
+                //destroys any fluids that have been missed when the explosion gets initialized
+                if(block == Blocks.WATER.getDefaultState() || block == Blocks.LAVA.getDefaultState() || fluid == Fluids.WATER.getDefaultState() || fluid == Fluids.FLOWING_WATER.getDefaultState() || fluid == Fluids.LAVA.getDefaultState() || fluid == Fluids.FLOWING_LAVA.getDefaultState()){
+                    worldObj.setBlockState(new BlockPos(x + posX, Y, z + posZ), Blocks.AIR.getDefaultState());
+                }
             }
 
             double limit = (radius / 2) + worldObj.rand.nextInt(radius / 4) + 7.5;
@@ -151,7 +158,7 @@ public class EgoExplosion {
                 for (int Y = ylimit; Y > ylimit - treeHeight; Y--)
                 {
                     if (Y == 0) break;
-                    worldObj.setBlockState(new BlockPos(x + posX, Y, z + posZ), Nukesfromthefuture.trol.getDefaultState(), metadata, 3);
+                    worldObj.setBlockState(new BlockPos(x + posX, Y, z + posZ), Nukesfromthefuture.trol.getDefaultState());
                 }
             }
 
@@ -221,14 +228,20 @@ public class EgoExplosion {
         for (int y = 256; y > 0; y--)
         {
             BlockState blockID = worldObj.getBlockState(new BlockPos(x, y, z));
-            if (blockID != Blocks.AIR.getDefaultState())
+            //i don't know if this will work
+            FluidState fluidID = worldObj.getFluidState(new BlockPos(x, y, z));
+            if (blockID != Blocks.AIR.getDefaultState() || fluidID != Fluids.EMPTY.getDefaultState())
             {
 
 
                 if (!blockID.isOpaqueCube(worldObj, new BlockPos(posX, posY, posZ)) || blockID == Blocks.OAK_LOG.getDefaultState() || blockID == Blocks.BIRCH_LOG.getDefaultState() || blockID == Blocks.DARK_OAK_LOG.getDefaultState() || blockID == Blocks.JUNGLE_LOG.getDefaultState() || blockID == Blocks.SPRUCE_LOG.getDefaultState() || blockID == Blocks.ACACIA_LOG.getDefaultState())
                 {
                     worldObj.removeBlock(new BlockPos(x, y, z), false);
-                    if (dist > radius / 2 && blockID == Blocks.OAK_LOG.getDefaultState() && worldObj.getBlockState(new BlockPos(x, y - 1, z)) == Blocks.OAK_LOG.getDefaultState()) isTree = true;
+                    if (dist > radius / 2 && blockID == Blocks.OAK_LOG.getDefaultState()  || blockID == Blocks.BIRCH_LOG.getDefaultState() || blockID == Blocks.DARK_OAK_LOG.getDefaultState() || blockID == Blocks.JUNGLE_LOG.getDefaultState() || blockID == Blocks.SPRUCE_LOG.getDefaultState() || blockID == Blocks.ACACIA_LOG.getDefaultState()){
+                        if(worldObj.getBlockState(new BlockPos(x, y - 1, z)) == Blocks.OAK_LOG.getDefaultState() || worldObj.getBlockState(new BlockPos(x, y - 1, z)) == Blocks.JUNGLE_LOG.getDefaultState() || worldObj.getBlockState(new BlockPos(x, y - 1, z)) == Blocks.DARK_OAK_LOG.getDefaultState() || worldObj.getBlockState(new BlockPos(x, y - 1, z)) == Blocks.ACACIA_LOG.getDefaultState() || worldObj.getBlockState(new BlockPos(x, y - 1, z)) == Blocks.BIRCH_LOG.getDefaultState() || worldObj.getBlockState(new BlockPos(x, y - 1, z)) == Blocks.SPRUCE_LOG.getDefaultState()) {
+                            isTree = true;
+                        }
+                    }
                     if (!found && isTree)
                     {
                         foundY = y;
