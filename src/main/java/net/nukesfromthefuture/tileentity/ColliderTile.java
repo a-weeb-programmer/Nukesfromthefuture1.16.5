@@ -6,11 +6,13 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.datafix.fixes.TippedArrow;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -50,12 +52,38 @@ public class ColliderTile extends TileEntity implements IFluidContainer, IFluidA
 
             @Override
             public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                return true;
+                if(slot == 0){
+                    return stack.getItem() == Nukesfromthefuture.black_hole;
+                }else if(slot == 1){
+                    return stack.getItem() == Nukesfromthefuture.black_hole;
+                }else if(slot == 4){
+                    return stack.getItem() == Nukesfromthefuture.black_hole;
+                }else if(slot == 3){
+                    return stack.getItem() == Nukesfromthefuture.black_hole;
+                }else if(slot == 2){
+                    return stack.getItem() == Nukesfromthefuture.singularity_magnet;
+                }else if(slot == 5){
+                    return true;
+                }else if(slot == 6){
+                    return true;
+                }
+                return false;
             }
 
             @Nonnull
             @Override
             public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+                if(slot == 0 && stack.getItem() != Nukesfromthefuture.black_hole){
+                    return stack;
+                }if(slot == 1 && stack.getItem() != Nukesfromthefuture.black_hole){
+                    return stack;
+                }if(slot == 4 && stack.getItem() != Nukesfromthefuture.black_hole){
+                    return stack;
+                }if(slot == 3 && stack.getItem() != Nukesfromthefuture.black_hole){
+                    return stack;
+                }if(slot == 2 && stack.getItem() != Nukesfromthefuture.singularity_magnet){
+                    return stack;
+                }
                 return super.insertItem(slot, stack, simulate);
             }
         };
@@ -74,21 +102,8 @@ public class ColliderTile extends TileEntity implements IFluidContainer, IFluidA
     @Override
     public void tick() {
         if(!world.isRemote) {
-            if(iInvInstance.getStackInSlot(5).getItem() == Nukesfromthefuture.black_hole_tank){
-                if(tank.getFill() < tank.getMaxFill()) {
-                    tank.setFill(tank.getFill() + 16000);
-                }
-                iInvInstance.getStackInSlot(5).setCount(iInvInstance.getStackInSlot(5).getCount() - 1);
-                if(iInvInstance.getStackInSlot(5).getCount() == 0){
-                    tank.setFill(tank.getFill());
-                }
-                if(iInvInstance.getStackInSlot(5).getCount() > 0){
-                    iInvInstance.insertItem(6, new ItemStack(Nukesfromthefuture.fluid_barrel_empty), false);
-                    iInvInstance.getStackInSlot(6).setCount(iInvInstance.getStackInSlot(6).getCount() + 1);
-                }
-            }
+            tank.loadTank(5, 6, iInvInstance)
             ;
-
             tank.updateTank(pos.getX(), pos.getY(), pos.getZ(), world.getDimensionKey());
         }
     }
@@ -181,5 +196,10 @@ public class ColliderTile extends TileEntity implements IFluidContainer, IFluidA
     @Override
     public double getMaxRenderDistanceSquared() {
         return 6550D;
+    }
+    public boolean isReady(){
+        if(iInvInstance.getStackInSlot(0).getItem() == Nukesfromthefuture.black_hole && iInvInstance.getStackInSlot(1).getItem() == Nukesfromthefuture.black_hole && iInvInstance.getStackInSlot(4).getItem() == Nukesfromthefuture.black_hole && iInvInstance.getStackInSlot(3).getItem() == Nukesfromthefuture.black_hole && iInvInstance.getStackInSlot(2).getItem() == Nukesfromthefuture.singularity_magnet && tank.getFill() >= 128000)
+            return true;
+        return false;
     }
 }

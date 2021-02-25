@@ -1,6 +1,8 @@
 package net.nukesfromthefuture.containers;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.nukesfromthefuture.interfaces.IFluidTankItem;
 import net.nukesfromthefuture.main.FluidHandler;
 
 public class FluidContainer {
@@ -18,4 +20,5 @@ public class FluidContainer {
         this.type = type;
         content = amount;
     }
+
 }

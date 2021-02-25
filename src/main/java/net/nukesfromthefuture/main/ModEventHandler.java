@@ -2,6 +2,8 @@ package net.nukesfromthefuture.main;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
+import net.minecraft.advancements.AdvancementList;
+import net.minecraft.advancements.criterion.TickTrigger;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
@@ -52,6 +54,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.player.AdvancementEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -110,6 +113,8 @@ public class ModEventHandler {
         gameRegistry.getRegistry().register(Nukesfromthefuture.black_hole_tank);
         gameRegistry.getRegistry().register(Nukesfromthefuture.iSingularity_nuke);
         gameRegistry.getRegistry().register(Nukesfromthefuture.fluid_barrel_empty);
+        gameRegistry.getRegistry().register(Nukesfromthefuture.black_hole);
+        gameRegistry.getRegistry().register(Nukesfromthefuture.singularity_magnet);
     }
     @SubscribeEvent
     public static void blockRegisterThingy(RegistryEvent.Register<Block> gameRegistry){
@@ -184,7 +189,6 @@ public class ModEventHandler {
             event.getItemColors().register(tank::setColor, tank);
         }
     }
-
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class Forge_bus {
         //FORGE, YOU'VE TAKEN THIS TOO FAR THIS TIME!

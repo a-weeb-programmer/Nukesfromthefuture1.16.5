@@ -37,7 +37,9 @@ public class ColliderScreen extends GuiInfoContainer<ColliderContainer> {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         minecraft.getTextureManager().bindTexture(texture);
         blit(matrixStack, guiLeft, guiTop, 0, 0, xSize, ySize);
-
+        if(ono.isReady()){
+            blit(matrixStack, guiLeft + 52, guiTop + 11, 173, 2, 66, 66);
+        }
         minecraft.getInstance().getTextureManager().bindTexture(ono.tank.getSheet());
         ono.tank.renderTank(matrixStack, this, guiLeft + 147, guiTop + 54, ono.tank.getTankType().textureX() * FluidTank.x, ono.tank.getTankType().textureY() * FluidTank.y, 16, 47);
 

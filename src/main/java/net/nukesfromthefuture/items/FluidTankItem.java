@@ -5,21 +5,25 @@ import com.google.common.collect.Maps;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.criterion.TickTrigger;
 import net.minecraft.block.LeavesBlock;
+import net.minecraft.block.StainedGlassBlock;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.*;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.datafix.fixes.LeavesFix;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.TickEvent;
+import net.nukesfromthefuture.interfaces.IFluidTankItem;
 import net.nukesfromthefuture.main.FluidHandler;
 import net.nukesfromthefuture.main.FluidHandler.FluidType;
+import net.nukesfromthefuture.main.Nukesfromthefuture;
 
 import java.util.List;
 import java.util.Map;
 
-public class FluidTankItem extends Item {
+public class FluidTankItem extends Item{
     public static Map<FluidType, FluidTankItem> tanks = Maps.newIdentityHashMap();
     public FluidType type;
     public FluidTankItem(FluidType type, Item.Properties prop) {

@@ -3,5 +3,18 @@
   "block.nff.trol": "Trololo",
   "item.nff.pizza": "Pizza",
   "item.nff.potatoe": "POTATO",
-  "item.nff.cooked_potatoe": "Cooked POTATO"
+  "item.nff.cooked_potatoe": "Cooked POTATO",
+  "item.nff.black_hole": "Black Whole",
+  "item.nff.sing_magnet": "Singularity Magnet",
+  "block.nff.ego_nuke": "Ego Nuke",
+  "block.nff.singularity_nuke": "Singularity Nuke",
+  "item.ego_ingot": "Egonium Ingot",
+  "elitefluid.bhf": "Black Hole Fuel",
+  "item.nff.empty_tank": "Fluid Barrel Empty",
+  "block.nff.beta": "The Beta",
+  "block.nff.waste_wood": "Ded Wood",
+  "block.nff.waste": "Ded Grass",
+  "block.nff.deathinum_ore": "Deathinum Ore",
+  "block.nff.ego_ore": "Egonium Ore",
+  "item.nff.black_hole_tank": "Fluid Barrel"
 }

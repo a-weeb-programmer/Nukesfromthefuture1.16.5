@@ -3,10 +3,17 @@ package net.nukesfromthefuture.main;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import com.mojang.datafixers.types.Type;
+import com.snowshock35.jeiintegration.JEIIntegration;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.PlayerAdvancements;
+import net.minecraft.advancements.criterion.EntityPredicate;
+import net.minecraft.advancements.criterion.TickTrigger;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.data.advancements.StoryAdvancements;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.*;
@@ -37,10 +44,7 @@ import net.nukesfromthefuture.entity.MK3Explosion;
 import net.nukesfromthefuture.entity.POTATOEntity;
 import net.nukesfromthefuture.items.*;
 import net.nukesfromthefuture.packet.PacketDispatcher;
-import net.nukesfromthefuture.tabs.FoodTab;
-import net.nukesfromthefuture.tabs.ResourceTab;
-import net.nukesfromthefuture.tabs.UselessTab;
-import net.nukesfromthefuture.tabs.Weapons;
+import net.nukesfromthefuture.tabs.*;
 import net.nukesfromthefuture.tags.NffTags;
 import net.nukesfromthefuture.tileentity.ColliderTile;
 import net.nukesfromthefuture.tileentity.TileBeta;
@@ -61,6 +65,7 @@ public class Nukesfromthefuture {
     public static Block trol;
     public static Item fluid_barrel_empty;
     public static Item fluid_barrel_full;
+    public static Item fluid_icon;
     //ah, yes, the classic potato
     public static Item POTATO;
     public static Block waste;
@@ -79,7 +84,10 @@ public class Nukesfromthefuture {
     public static Block singularity_nuke;
     public static Item energy_extractor;
     public static Item nuke_rod;
+    public static Advancement POTATOkill;
     public static Item black_hole_tank;
+    public static Item black_hole;
+    public static Item singularity_magnet;
     public static Item ego_tank;
     public static Item static_donut;
     public static Block beta_nuke;
@@ -185,16 +193,18 @@ public class Nukesfromthefuture {
         singularity_nuke = new SingularityNuke(Block.Properties.create(Material.IRON).sound(SoundType.ANVIL).hardnessAndResistance(2.0F, 3.0F).notSolid()).setRegistryName("singularity_nuke");
         iSingularity_nuke = new BlockItem(singularity_nuke, new Item.Properties().group(weapons)).setRegistryName("singularity_nuke");
         fluid_barrel_empty = new Item(new Item.Properties().group(resources)).setRegistryName("empty_tank");
-        FluidContainerRegistry.registerContainer(new FluidContainer(new ItemStack(Nukesfromthefuture.ego_tank), new ItemStack(Nukesfromthefuture.fluid_barrel_empty), FluidHandler.FluidType.egonium, 16000));
-        FluidContainerRegistry.registerContainer(new FluidContainer(new ItemStack(Nukesfromthefuture.black_hole_tank), new ItemStack(Nukesfromthefuture.fluid_barrel_empty), FluidHandler.FluidType.BLACK_HOLE_FUEL, 16000));
+        black_hole = new Item(new Item.Properties().group(weapons)).setRegistryName("black_hole");
+        singularity_magnet = new Item(new Item.Properties().group(machines)).setRegistryName("sing_magnet");
+        FluidContainerRegistry.registerContainer(new FluidContainer(new ItemStack(black_hole_tank), new ItemStack(fluid_barrel_empty), FluidHandler.FluidType.BLACK_HOLE_FUEL, 16000));
         MinecraftForge.EVENT_BUS.addListener(ModEventHandler::clientStuff);
         MinecraftForge.EVENT_BUS.addListener(ModEventHandler::serverStuff);
         MinecraftForge.EVENT_BUS.register(new ModEventHandler());
         NffTags.register();
-
     }
     ItemGroup stuff = new UselessTab("uselessStuff");
     ItemGroup weapons = new Weapons("nffweapons");
     ItemGroup resources = new ResourceTab("nffresources");
+    ItemGroup machines = new MachineTab("nffMachines");
     ItemGroup food = new FoodTab("foods");
+
 }

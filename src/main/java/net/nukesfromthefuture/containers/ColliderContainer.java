@@ -39,11 +39,11 @@ public class ColliderContainer extends Container {
         }
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 9; j++){
-                addSlot(new SlotItemHandler(real_inv, j + i * 9 + 9, 9 + j * 18, 93 + i * 18));
+                addSlot(new SlotItemHandler(real_inv, j + i * 9 + 9, 6 + j * 18, 83 + i * 18));
             }
         }
         for(int i = 0; i < 9; i++){
-            addSlot(new SlotItemHandler(real_inv, i, 9 + i * 18, 151));
+            addSlot(new SlotItemHandler(real_inv, i, 6 + i * 18, 141));
         }
     }
 

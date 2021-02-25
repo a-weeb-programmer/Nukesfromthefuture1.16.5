@@ -3,6 +3,8 @@ package net.nukesfromthefuture.containers;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.RegistryKey;
@@ -13,11 +15,17 @@ import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.items.ItemStackHandler;
 import net.nukesfromthefuture.guiscreens.GuiInfoContainer;
 import net.nukesfromthefuture.interfaces.Bugged;
+import net.nukesfromthefuture.interfaces.IFluidTankItem;
 import net.nukesfromthefuture.items.ItemFluidIdentidier;
 import net.nukesfromthefuture.main.FluidHandler;
 import net.nukesfromthefuture.main.FluidHandler.FluidType;
+import net.nukesfromthefuture.main.Nukesfromthefuture;
 import net.nukesfromthefuture.packet.PacketDispatcher;
 import net.nukesfromthefuture.packet.TEFluidPacket;
 /**This is a special type of fluid tank that has been modified so
@@ -79,42 +87,36 @@ public class FluidTank {
     public void updateTank(int x, int y, int z, RegistryKey<World> dim) {
         PacketDispatcher.sendToAll(new TEFluidPacket(x, y, z, getFill(), index, type));
     }
-    @Bugged(bug = "It won't load the fluid into the tank. I had to put code in the tick method of the tile entity that will fill up the fluid once the barrel is in the slot", possible_solutions = "there is probably something wrong with the fluid container registry")
+
     //Fills tank from canisters
-    public void loadTank(ItemStack in, ItemStack out) {
-        int size = in.getCount();
-        int out_size = out.getCount();
+    public void loadTank(int in, int out, IItemHandler itemDest) {
         FluidType inType = FluidType.None;
-        if(in != null) {
-            inType = FluidContainerRegistry.getFluidType(in);
+        if(!itemDest.getStackInSlot(in).isEmpty()) {
+            inType = FluidContainerRegistry.getFluidType(itemDest.getStackInSlot(in));
 
 
 
-            if(FluidContainerRegistry.getFluidContent(in, type) <= 0)
+            if(FluidContainerRegistry.getFluidContent(itemDest.getStackInSlot(in), type) <= 0)
                 return;
         } else {
             return;
         }
 
-        if(in != null && inType.name().equals(type.name()) && fluid + FluidContainerRegistry.getFluidContent(in, type) <= maxFluid) {
-            if(out == null) {
-                fluid += FluidContainerRegistry.getFluidContent(in, type);
-                out = FluidContainerRegistry.getEmptyContainer(in);
-                size--;
-                if(size <= 0)
-                    in = null;
-            } else if(out != null && out.getItem() == FluidContainerRegistry.getEmptyContainer(in).getItem() && out_size < out.getMaxStackSize()) {
-                fluid += FluidContainerRegistry.getFluidContent(in, type);
-                size--;
-                if(size <= 0)
-                    in = null;
-                out_size++;
+        if(!itemDest.getStackInSlot(in).isEmpty() && inType.name().equals(type.name()) && fluid + FluidContainerRegistry.getFluidContent(itemDest.getStackInSlot(in), type) <= maxFluid) {
+            if(itemDest.getStackInSlot(out).isEmpty()) {
+                fluid += FluidContainerRegistry.getFluidContent(itemDest.getStackInSlot(in), type);
+                itemDest.insertItem(out, FluidContainerRegistry.getEmptyContainer(itemDest.getStackInSlot(in)), false);
+                itemDest.getStackInSlot(in).setCount(itemDest.getStackInSlot(in).getCount() - 1);
+            } else if(!itemDest.getStackInSlot(out).isEmpty() && itemDest.getStackInSlot(out).getItem() == FluidContainerRegistry.getEmptyContainer(itemDest.getStackInSlot(in)).getItem() && itemDest.getStackInSlot(out).getCount() < itemDest.getStackInSlot(out).getMaxStackSize()) {
+                fluid += FluidContainerRegistry.getFluidContent(itemDest.getStackInSlot(in), type);
+                itemDest.getStackInSlot(in).setCount(itemDest.getStackInSlot(in).getCount() - 1);
+                itemDest.getStackInSlot(out).setCount(itemDest.getStackInSlot(out).getCount() + 1);
             }
         }
     }
 
     //Fills canisters from tank
-    public void unloadTank(int in, int out, ItemStack[] slots) {
+ /*   public void unloadTank(int in, int out, ItemStack[] slots) {
         int size = slots[in].getCount();
         int out_size = slots[out].getCount();
         ItemStack full = null;
@@ -145,7 +147,7 @@ public class FluidTank {
 
 
     }
-
+    */
     //Changes tank type
     public void setType(int in, int out, ItemStack[] slots) {
 
