@@ -1,0 +1,29 @@
+{
+  "parent": "nff:things/root",
+  "display": {
+    "icon": {
+      "item": "nff:nether_two"
+    },
+    "title": {
+      "translate": "rad_sickness"
+    },
+    "description": {
+      "translate": "get_rad_sickness"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_in_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "rad_cancer_UwU": {
+      "trigger": "nff:sickness",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "rad_cancer_UwU"
+    ]
+  ]
+}

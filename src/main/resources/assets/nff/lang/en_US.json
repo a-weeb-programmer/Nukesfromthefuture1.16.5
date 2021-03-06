@@ -16,5 +16,7 @@
   "block.nff.waste": "Ded Grass",
   "block.nff.deathinum_ore": "Deathinum Ore",
   "block.nff.ego_ore": "Egonium Ore",
-  "item.nff.black_hole_tank": "Fluid Barrel"
+  "item.nff.black_hole_tank": "Fluid Barrel",
+  "nff_installed": "Nukes From The Future",
+  "tanks_for_installing": "Thanks for choosing my mod"
 }

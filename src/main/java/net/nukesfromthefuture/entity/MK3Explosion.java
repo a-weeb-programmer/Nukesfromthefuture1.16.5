@@ -2,6 +2,7 @@ package net.nukesfromthefuture.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -11,10 +12,12 @@ import net.minecraft.network.play.server.SSpawnObjectPacket;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.nukesfromthefuture.explosion.Advanced;
 import net.nukesfromthefuture.explosion.Generic;
 import net.nukesfromthefuture.main.Nukesfromthefuture;
+import net.nukesfromthefuture.saveddata.RadSavedData;
 import org.apache.logging.log4j.Level;
 
 public class MK3Explosion extends Entity{
@@ -130,13 +133,13 @@ public class MK3Explosion extends Entity{
             Nukesfromthefuture.logger.log(Level.INFO, "Beta nuclear explosion has been done successfully at: " + x + ", " + y + ", " + z + "." + " With a strength of:" + destructionRange );
         }
         if(!world.isRemote && waste) {
-            //RadSaveData data = RadSaveData.getData(worldObj);
+            RadSavedData data = RadSavedData.getData((ServerWorld) world);
 
             //float radMax = (float) (length / 2F * Math.pow(length, 2) / 35F);
             float radMax = Math.min((float) ((destructionRange / 2) / 2F * Math.pow(destructionRange / 2, 1.5) / 35F), 15000);
             //System.out.println(radMax);
             float rad = radMax / 4F;
-            //data.incrementRad(worldObj, (int)this.posX, (int)this.posZ, rad, radMax);
+            data.incrementRad(world, (int)this.getPosX(), (int)this.getPosY(), rad, radMax, destructionRange * 1.5, getPosX(), getPosZ());
         }
         if(!world.isRemote && !this.did)
         {

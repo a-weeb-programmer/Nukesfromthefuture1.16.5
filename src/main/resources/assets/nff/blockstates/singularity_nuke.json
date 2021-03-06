@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
       "model": "nff:block/singularity_nuke"
+    },
+    "facing=east": {
+      "model": "nff:block/singularity_nuke",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "nff:block/singularity_nuke",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "nff:block/singularity_nuke",
+      "y": 270
     }
   }
 }

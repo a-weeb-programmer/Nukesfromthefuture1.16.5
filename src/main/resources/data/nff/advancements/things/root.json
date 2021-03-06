@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "item": "nff:ego_nuke"
+    },
+    "title": {
+      "translate": "nff_installed"
+    },
+    "description": {
+      "translate": "tanks_for_installing"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "nff:textures/blocks/ego_ore.png"
+  },
+  "criteria": {
+    "installed": {
+      "__comment": "attention datapack developers, you probably hate me now, but I am still using hardcoded triggers. UwU",
+      "trigger": "nff:installed_mod",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "installed"
+    ]
+  ]
+}

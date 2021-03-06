@@ -22,6 +22,8 @@ public class PacketDispatcher {
     public static final void registerPackets(){
         int i = 0;
         wrapper.registerMessage(i++, TEFluidPacket.class, TEFluidPacket::toBytes, TEFluidPacket::new, TEFluidPacket::handle, Optional.of( NetworkDirection.PLAY_TO_CLIENT));
+        wrapper.registerMessage(i++, AuxParticlePacket.class, AuxParticlePacket::toBytes, AuxParticlePacket::new, AuxParticlePacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        wrapper.registerMessage(i++, RadSurveyPacket.class, RadSurveyPacket::toBytes, RadSurveyPacket::new, RadSurveyPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
     // packet to player, called server side
     // specific player

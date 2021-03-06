@@ -16,6 +16,7 @@ import net.minecraft.util.datafix.fixes.TippedArrow;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -28,6 +29,7 @@ import net.nukesfromthefuture.interfaces.IFluidAcceptor;
 import net.nukesfromthefuture.interfaces.IFluidContainer;
 import net.nukesfromthefuture.main.FluidHandler;
 import net.nukesfromthefuture.main.Nukesfromthefuture;
+import net.nukesfromthefuture.saveddata.RadSavedData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -105,6 +107,9 @@ public class ColliderTile extends TileEntity implements IFluidContainer, IFluidA
             tank.loadTank(5, 6, iInvInstance)
             ;
             tank.updateTank(pos.getX(), pos.getY(), pos.getZ(), world.getDimensionKey());
+
+            RadSavedData data = RadSavedData.getData((ServerWorld) world);
+            data.incrementRad(world, pos.getX(), pos.getZ(), 100, 400, 20, pos.getX(), pos.getZ());
         }
     }
     @Override

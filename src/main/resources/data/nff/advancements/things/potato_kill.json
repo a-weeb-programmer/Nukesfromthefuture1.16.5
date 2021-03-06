@@ -1,0 +1,32 @@
+{
+  "parent": "nff:things/root",
+  "display": {
+    "icon": {
+      "item": "nff:potatoe"
+    },
+    "title": {
+      "translate": "POTATO_kill"
+    },
+    "description": {
+      "translate": "Kill_with_da_potato"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 1000
+  },
+  "criteria": {
+    "potato_throw": {
+      "trigger": "nff:throw_potato",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+    "potato_throw"
+    ]
+  ]
+}

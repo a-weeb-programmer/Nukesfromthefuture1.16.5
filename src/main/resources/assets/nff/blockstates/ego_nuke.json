@@ -1,7 +1,34 @@
 {
   "variants": {
-    "": {
+    "old_model=false,facing=north": {
       "model": "nff:block/ego_nuke"
+    },
+    "old_model=true,facing=north": {
+      "model": "nff:block/old_ego"
+    },
+    "old_model=false,facing=east": {
+      "model": "nff:block/ego_nuke",
+      "y": 90
+    },
+    "old_model=true,facing=east": {
+      "model": "nff:block/old_ego",
+      "y": 90
+    },
+    "old_model=false,facing=south": {
+      "model": "nff:block/ego_nuke",
+      "y": 180
+    },
+    "old_model=true,facing=south": {
+      "model": "nff:block/old_ego",
+      "y": 180
+    },
+    "old_model=false,facing=west": {
+      "model": "nff:block/ego_nuke",
+      "y": 270
+    },
+    "old_model=true,facing=west": {
+      "model": "nff:block/old_ego",
+      "y": 270
     }
   }
 }

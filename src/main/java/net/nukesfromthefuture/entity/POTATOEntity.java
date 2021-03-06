@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
+import net.nukesfromthefuture.main.NffDamageSource;
 import net.nukesfromthefuture.main.Nukesfromthefuture;
 
 public class POTATOEntity extends ProjectileItemEntity {
@@ -41,7 +42,7 @@ public class POTATOEntity extends ProjectileItemEntity {
      */
     protected void onEntityHit(EntityRayTraceResult p_213868_1_) {
         super.onEntityHit(p_213868_1_);
-        p_213868_1_.getEntity().attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()), 10000000000000000000000000000000000.0F);
+        p_213868_1_.getEntity().attackEntityFrom(NffDamageSource.POTATO_throw, 10000000000000000000000000000000000.0F);
     }
     @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {

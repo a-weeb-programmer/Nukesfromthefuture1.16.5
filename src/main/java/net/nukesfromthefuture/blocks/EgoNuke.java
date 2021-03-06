@@ -1,17 +1,18 @@
 package net.nukesfromthefuture.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
+import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -32,10 +33,12 @@ import javax.annotation.Nullable;
 
 public class EgoNuke extends Block {
     public static int aoc = 0;
+    public static final BooleanProperty old = BooleanProperty.create("old_model");
+    public static final DirectionProperty facing = HorizontalBlock.HORIZONTAL_FACING;
     public EgoNuke(Block.Properties prop){
         super(prop);
+        setDefaultState(this.getStateContainer().getBaseState().with(old, Nukesfromthefuture.old_ego.get()).with(facing, Direction.NORTH));
     }
-
     @Override
     public boolean hasTileEntity(BlockState state) {
         return true;
@@ -45,6 +48,12 @@ public class EgoNuke extends Block {
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileEgoNuke();
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        return this.getDefaultState().with(facing, context.getPlacementHorizontalFacing().getOpposite());
     }
 
     @Override
@@ -76,5 +85,18 @@ public class EgoNuke extends Block {
             }
         }
         return ActionResultType.SUCCESS;
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(old, facing);
+    }
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirrorIn) {
+        return state.rotate(mirrorIn.toRotation(state.get(facing)));
+    }
+    @Override
+    public BlockState rotate(BlockState state, Rotation rot) {
+        return state.with(facing, rot.rotate(state.get(facing)));
     }
 }
