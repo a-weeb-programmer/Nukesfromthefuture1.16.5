@@ -1,8 +1,15 @@
 package net.nukesfromthefuture.main;
 
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.INBTType;
+import net.minecraft.util.text.ITextComponent;
+
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.Arrays;
 
-public class FluidHandler {
+public class FluidHandler{
     public enum FluidType{
         None	(0x888888, 0, 1, 1, 0, 0, 0, EnumSymbol.NONE, "elitefluid.none"),
         COOLANT	(0x8FCADC, 7, 2, 1, 0, 0, 10, EnumSymbol.NONE, "elitefluid.coolant"),
@@ -26,6 +33,8 @@ public class FluidHandler {
         private String name;
         //Whether the fluid counts is too hot for certain tanks
         private boolean hot;
+        public FluidType type;
+        public CompoundNBT tag;
         //Whether the fluid counts as corrosive and requires a steel tank
         private boolean corrosive;
         //Whether the fluid is antimatter and requires magnetic storage
@@ -117,6 +126,12 @@ public class FluidHandler {
         public boolean isAntimatter() {
             return antimatter;
         }
+        public CompoundNBT write(CompoundNBT nbt){
+            nbt.putString("type", type.getName());
+            return nbt;
+        }
+        public void read(CompoundNBT nbt){
+            type = getEnumFromName(nbt.getString("type"));
+        }
     };
-
 }

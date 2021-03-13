@@ -108,8 +108,7 @@ public class ColliderTile extends TileEntity implements IFluidContainer, IFluidA
             ;
             tank.updateTank(pos.getX(), pos.getY(), pos.getZ(), world.getDimensionKey());
 
-            RadSavedData data = RadSavedData.getData((ServerWorld) world);
-            data.incrementRad(world, pos.getX(), pos.getZ(), 100, 400, 20, pos.getX(), pos.getZ());
+
         }
     }
     @Override

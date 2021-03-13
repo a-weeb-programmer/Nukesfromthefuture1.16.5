@@ -1,0 +1,29 @@
+{
+  "parent": "nff:things/root",
+  "display": {
+    "icon": {
+      "item": "nff:nuke_taco"
+    },
+    "title": {
+      "translate": "tacod"
+    },
+    "description": {
+      "translate": "tacod"
+    },
+    "frame": "task",
+    "announce_to_chat": true,
+    "show_toast": true,
+    "hidden": true
+  },
+  "criteria": {
+    "taco_bell": {
+      "trigger": "nff:ate_taco",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "taco_bell"
+    ]
+  ]
+}

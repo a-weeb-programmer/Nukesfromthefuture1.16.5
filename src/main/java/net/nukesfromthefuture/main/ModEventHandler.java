@@ -84,6 +84,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.AdvancementEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -187,10 +188,11 @@ public class ModEventHandler {
         gameRegistry.getRegistry().register(Nukesfromthefuture.empty_identifier);
         gameRegistry.getRegistry().register(Nukesfromthefuture.ego_fluid_identifier);
         gameRegistry.getRegistry().register(Nukesfromthefuture.unstable_pluto_identifier);
-        gameRegistry.getRegistry().register(Nukesfromthefuture.ego_tank);
-        gameRegistry.getRegistry().register(Nukesfromthefuture.black_hole_tank);
+        //gameRegistry.getRegistry().register(Nukesfromthefuture.ego_tank);
+        //gameRegistry.getRegistry().register(Nukesfromthefuture.black_hole_tank);
         gameRegistry.getRegistry().register(Nukesfromthefuture.iSingularity_nuke);
         gameRegistry.getRegistry().register(Nukesfromthefuture.fluid_barrel_empty);
+        gameRegistry.getRegistry().register(Nukesfromthefuture.fluid_barrel_full);
         gameRegistry.getRegistry().register(Nukesfromthefuture.black_hole);
         gameRegistry.getRegistry().register(Nukesfromthefuture.singularity_magnet);
         gameRegistry.getRegistry().register(Nukesfromthefuture.iNetherReactor);
@@ -198,6 +200,7 @@ public class ModEventHandler {
         gameRegistry.getRegistry().register(Nukesfromthefuture.iReactor_3);
         gameRegistry.getRegistry().register(Nukesfromthefuture.iRed_obs);
         gameRegistry.getRegistry().register(Nukesfromthefuture.pizza_creep_spawn);
+        gameRegistry.getRegistry().register(Nukesfromthefuture.nuke_taco);
     }
     @SubscribeEvent
     public static void blockRegisterThingy(RegistryEvent.Register<Block> gameRegistry){
@@ -246,9 +249,10 @@ public class ModEventHandler {
                 return fluid_identifier.getColor(color, stack);
             }, fluid_identifier);
         }
-        for(FluidTankItem tank : FluidTankItem.getTanks()){
-            event.getItemColors().register(tank::setColor, tank);
-        }
+            event.getItemColors().register((stack, color) -> {
+                return ((FluidTankItem)Nukesfromthefuture.fluid_barrel_full).setColor(stack, color);
+            }, Nukesfromthefuture.fluid_barrel_full);
+
     }
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class Forge_bus {
@@ -305,6 +309,18 @@ public class ModEventHandler {
                 }
             }
 
+        }
+        @SubscribeEvent
+        public static void damageStuff(LivingHurtEvent event){
+
+            if(event.getSource() == NffDamageSource.taco && event.getEntity() instanceof PlayerEntity){
+                for(Object o : event.getEntity().world.getPlayers()){
+                    PlayerEntity player = (PlayerEntity) o;
+                    if(player instanceof ServerPlayerEntity){
+                        Nukesfromthefuture.ate_taco.trigger(((ServerPlayerEntity) player));
+                    }
+                }
+            }
         }
         @SubscribeEvent
         public static void tickStuff(TickEvent.WorldTickEvent event){

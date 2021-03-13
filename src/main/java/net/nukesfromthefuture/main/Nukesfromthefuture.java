@@ -23,6 +23,7 @@ import net.minecraft.loot.LootTable;
 import net.minecraft.loot.LootTables;
 import net.minecraft.loot.LootType;
 import net.minecraft.loot.conditions.KilledByPlayer;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.Tag;
@@ -102,8 +103,10 @@ public class Nukesfromthefuture {
     public static Advancement install_mod;
     public static Item nuke_rod;
     public static Advancement rad_poison;
+    public static Advancement tacod;
     public static PositionTrigger sickness;
     public static PositionTrigger rad_death;
+    public static PositionTrigger ate_taco;
     public static Item black_hole_tank;
     public static Item black_hole;
     public static Item singularity_magnet;
@@ -111,6 +114,7 @@ public class Nukesfromthefuture {
     public static Item static_donut;
     public static Advancement radiation_death;
     public static Block beta_nuke;
+    public static Item nuke_taco;
     //i hate item blocks, item blocks can die
     public static Item iTrol;
     public static Item iLead_glass;
@@ -248,12 +252,14 @@ public class Nukesfromthefuture {
         installed = CriteriaTriggers.register(new PositionTrigger(new ResourceLocation(mod_id, "installed_mod")));
         install_mod = Advancement.Builder.builder().withDisplay(new ItemStack(iEgo_nuke), new StringTextComponent("nff_installed"), new StringTextComponent("tanks_for_installing"), new ResourceLocation(mod_id, "textures/blocks/ego_ore.png"), FrameType.TASK, true, true, false).withCriterion("install", new PositionTrigger.Instance(installed.getId(), EntityPredicate.AndPredicate.ANY_AND, LocationPredicate.ANY)).register(Advancement::getCriteria, "nff:things/root");
         unstable_pluto_identifier = new ItemFluidIdentidier(new Item.Properties().group(resources), FluidHandler.FluidType.unstable_plutonium).setRegistryName("unstable_identifier");
-        ego_tank = new FluidTankItem(FluidHandler.FluidType.egonium, new Item.Properties().group(resources)).setRegistryName("ego_tank");
-        black_hole_tank = new FluidTankItem(FluidHandler.FluidType.BLACK_HOLE_FUEL, new Item.Properties().group(resources)).setRegistryName("black_hole_tank");
+        //ego_tank = new FluidTankItem(FluidHandler.FluidType.egonium, new Item.Properties().group(resources)).setRegistryName("ego_tank");
+        //black_hole_tank = new FluidTankItem(FluidHandler.FluidType.BLACK_HOLE_FUEL, new Item.Properties().group(resources)).setRegistryName("black_hole_tank");
         singularity_nuke = new SingularityNuke(Block.Properties.create(Material.IRON).sound(SoundType.ANVIL).hardnessAndResistance(2.0F, 3.0F).notSolid()).setRegistryName("singularity_nuke");
         iSingularity_nuke = new BlockItem(singularity_nuke, new Item.Properties().group(weapons)).setRegistryName("singularity_nuke");
         fluid_barrel_empty = new Item(new Item.Properties().group(resources)).setRegistryName("empty_tank");
+        fluid_barrel_full = new FluidTankItem(new Item.Properties().group(machines)).setRegistryName("fluid_tank_full");
         black_hole = new Item(new Item.Properties().group(weapons)).setRegistryName("black_hole");
+        ate_taco = CriteriaTriggers.register(new PositionTrigger(new ResourceLocation(mod_id, "ate_taco")));
         singularity_magnet = new Item(new Item.Properties().group(machines)).setRegistryName("sing_magnet");
         nether_reactor = new NetherReact(Block.Properties.create(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(5.0F)).setRegistryName("nether_reactor");
         nether_reactor_2 = new NetherReact(Block.Properties.create(Material.IRON).sound(SoundType.METAL).hardnessAndResistance(-1)).setRegistryName("nether_two");
@@ -266,19 +272,27 @@ public class Nukesfromthefuture {
         rad_trigger = CriteriaTriggers.register(new PositionTrigger(new ResourceLocation(mod_id, "throw_potato")));
         sickness = CriteriaTriggers.register(new PositionTrigger(new ResourceLocation(mod_id, "sickness")));
         rad_death = CriteriaTriggers.register(new PositionTrigger(new ResourceLocation(mod_id, "radiation_death")));
+        nuke_taco = new NukeTaco(new Item.Properties().group(food).food(new Food.Builder().meat().hunger(5).saturation(10).build())).setRegistryName("nuke_taco");
         pizza_creep_spawn = (SpawnEggItem) new SpawnEggItem(creeper, 0xDA0000, 0x009300, new Item.Properties().group(ItemGroup.MISC)).setRegistryName("creeper_spawn");
-        FluidContainerRegistry.registerContainer(new FluidContainer(new ItemStack(black_hole_tank), new ItemStack(fluid_barrel_empty), FluidHandler.FluidType.BLACK_HOLE_FUEL, 16000));
+        //FluidContainerRegistry.registerContainer(new FluidContainer(new ItemStack(black_hole_tank), new ItemStack(fluid_barrel_empty), FluidHandler.FluidType.BLACK_HOLE_FUEL, 16000));
         POTATOKill = Advancement.Builder.builder().withDisplay(new ItemStack(POTATO), new StringTextComponent("POTATO_kill"), new StringTextComponent("Kill_with_da_potato"), null, FrameType.CHALLENGE, true, true, false).withCriterion("potato_kill", new PositionTrigger.Instance(rad_trigger.getId(), EntityPredicate.AndPredicate.ANY_AND, LocationPredicate.ANY)).register(Advancement::getCriteria, "nff:things/potato_kill");
         rad_poison = Advancement.Builder.builder().withDisplay(new ItemStack(iReactor_2), new StringTextComponent("rad_sickness"), new StringTextComponent("get_rad_sickness"), null, FrameType.TASK, true, true, false).withCriterion("rad_cancer_UwU", new PositionTrigger.Instance(sickness.getId(), EntityPredicate.AndPredicate.ANY_AND, LocationPredicate.ANY)).register(Advancement::getCriteria, "nff:things/radiation_poisoning");
         radiation_death = Advancement.Builder.builder().withDisplay(new ItemStack(iReactor_3), new StringTextComponent("radiation_death"), new StringTextComponent("die_from_radiation"), null, FrameType.CHALLENGE, true, true, true).withCriterion("rad_death_oof", new PositionTrigger.Instance(rad_death.getId(), EntityPredicate.AndPredicate.ANY_AND, LocationPredicate.ANY)).register(Advancement::getCriteria, "nff:things/rad_death");
+        tacod = Advancement.Builder.builder().withDisplay(new ItemStack(nuke_taco), new StringTextComponent("tacod"), new StringTextComponent("tacod"), null, FrameType.TASK, true, true, true).withCriterion("taco_bell", new PositionTrigger.Instance(ate_taco.getId(), EntityPredicate.AndPredicate.ANY_AND, LocationPredicate.ANY)).register(Advancement::getCriteria, "nff:things/tacod");
         MinecraftForge.EVENT_BUS.register(new ModEventHandler.Forge_bus());
+        for(int i = 0; i < FluidHandler.FluidType.values().length; i++){
+            ItemStack stack = new ItemStack(fluid_barrel_full);
+            if(fluid_barrel_full.getDefaultInstance().getTag() != null) {
+                FluidContainerRegistry.registerContainer(new FluidContainer(stack, new ItemStack(fluid_barrel_empty), FluidHandler.FluidType.getEnum(stack.getTag().getInt("type")), 16000));
+            }
+        }
         NffTags.register();
 
     }
-    ItemGroup stuff = new UselessTab("uselessStuff");
-    ItemGroup weapons = new Weapons("nffweapons");
-    ItemGroup resources = new ResourceTab("nffresources");
-    ItemGroup machines = new MachineTab("nffMachines");
-    ItemGroup food = new FoodTab("foods");
+    public static ItemGroup stuff = new UselessTab("uselessStuff");
+    public static ItemGroup weapons = new Weapons("nffweapons");
+    public static ItemGroup resources = new ResourceTab("nffresources");
+    public static ItemGroup machines = new MachineTab("nffMachines");
+    public static ItemGroup food = new FoodTab("foods");
 
 }
