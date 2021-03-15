@@ -10,6 +10,8 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
+import net.nukesfromthefuture.containers.FluidContainer;
+import net.nukesfromthefuture.containers.FluidContainerRegistry;
 import net.nukesfromthefuture.containers.FluidTank;
 import net.nukesfromthefuture.main.FluidHandler.FluidType;
 import net.nukesfromthefuture.main.Nukesfromthefuture;
@@ -68,6 +70,7 @@ public class FluidTankItem extends Item{
                 ItemStack stack = new ItemStack(this, 1);
                 stack.setTag(new CompoundNBT());
                 stack.getTag().putString("type", FluidType.getEnum(i).getName());
+                FluidContainerRegistry.registerContainer(new FluidContainer(stack, new ItemStack(Nukesfromthefuture.fluid_barrel_empty), FluidType.getEnumFromName(stack.getTag().getString("type")), 16000));
                 list.add(stack);
             }
         }

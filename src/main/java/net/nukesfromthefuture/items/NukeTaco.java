@@ -1,5 +1,6 @@
 package net.nukesfromthefuture.items;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Food;
 import net.minecraft.item.Foods;
@@ -17,13 +18,12 @@ public class NukeTaco extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack stack = playerIn.getHeldItem(handIn);
-        if(!worldIn.isRemote){
-            playerIn.attackEntityFrom(NffDamageSource.taco, 1);
-            MK3Explosion entity = new MK3Explosion(worldIn,(int) playerIn.getPosX(), (int)playerIn.getPosY(),(int) playerIn.getPosZ(), 90, 14);
+    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+        if(!worldIn.isRemote && entityLiving instanceof PlayerEntity){
+            ((PlayerEntity)entityLiving).attackEntityFrom(NffDamageSource.taco, 1);
+            MK3Explosion entity = new MK3Explosion(worldIn,(int) ((PlayerEntity)entityLiving).getPosX(), (int)((PlayerEntity)entityLiving).getPosY(),(int) ((PlayerEntity)entityLiving).getPosZ(), 90, 14);
             worldIn.addEntity(entity);
         }
-        return ActionResult.func_233538_a_(stack, worldIn.isRemote());
+        return stack;
     }
 }

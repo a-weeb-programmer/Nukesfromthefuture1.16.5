@@ -185,9 +185,9 @@ public class ModEventHandler {
         gameRegistry.getRegistry().register(Nukesfromthefuture.iWasteWood);
         gameRegistry.getRegistry().register(Nukesfromthefuture.iDeathinum);
         gameRegistry.getRegistry().register(Nukesfromthefuture.iBeta_nuke);
-        gameRegistry.getRegistry().register(Nukesfromthefuture.empty_identifier);
+        //gameRegistry.getRegistry().register(Nukesfromthefuture.empty_identifier);
         gameRegistry.getRegistry().register(Nukesfromthefuture.ego_fluid_identifier);
-        gameRegistry.getRegistry().register(Nukesfromthefuture.unstable_pluto_identifier);
+        //gameRegistry.getRegistry().register(Nukesfromthefuture.unstable_pluto_identifier);
         //gameRegistry.getRegistry().register(Nukesfromthefuture.ego_tank);
         //gameRegistry.getRegistry().register(Nukesfromthefuture.black_hole_tank);
         gameRegistry.getRegistry().register(Nukesfromthefuture.iSingularity_nuke);
@@ -244,11 +244,9 @@ public class ModEventHandler {
     }
     @SubscribeEvent
     public static void colorStuff(ColorHandlerEvent.Item event) {
-        for (ItemFluidIdentidier fluid_identifier : ItemFluidIdentidier.getIdentifier()) {
-            event.getItemColors().register((stack, color) -> {
-                return fluid_identifier.getColor(color, stack);
-            }, fluid_identifier);
-        }
+        event.getItemColors().register((stack, color) -> {
+            return ((ItemFluidIdentidier)Nukesfromthefuture.ego_fluid_identifier).getColorFromItemStack(stack, color);
+        }, Nukesfromthefuture.ego_fluid_identifier);
             event.getItemColors().register((stack, color) -> {
                 return ((FluidTankItem)Nukesfromthefuture.fluid_barrel_full).setColor(stack, color);
             }, Nukesfromthefuture.fluid_barrel_full);

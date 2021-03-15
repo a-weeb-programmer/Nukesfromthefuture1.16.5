@@ -12,14 +12,14 @@ import java.util.Arrays;
 public class FluidHandler{
     public enum FluidType{
         None	(0x888888, 0, 1, 1, 0, 0, 0, EnumSymbol.NONE, "elitefluid.none"),
-        COOLANT	(0x8FCADC, 7, 2, 1, 0, 0, 10, EnumSymbol.NONE, "elitefluid.coolant"),
-        BLACK_HOLE_FUEL(0xA10000, 1, 2, 1, 0, 40, 40, EnumSymbol.NONE, "elitefluid.bhf"),
-        LAVA(0xC93806, 3, 1, 1, 0, 0, 0, EnumSymbol.NONE, "elitefluid.lava"),
-        ANTITIME(0x38E8E5, 14, 2, 1, 0, 50, 100, EnumSymbol.NONE, "elitefluid.antitime"),
-        TROL_FLUID(0x888888, 15, 1, 1, 50, 50, 50, EnumSymbol.NONE, "elitefluid.trol"),
+        coolant	(0x8FCADC, 7, 2, 1, 0, 0, 10, EnumSymbol.NONE, "elitefluid.coolant"),
+        black_hole_fuel(0xA10000, 1, 2, 1, 0, 40, 40, EnumSymbol.NONE, "elitefluid.bhf"),
+        lava(0xC93806, 3, 1, 1, 0, 0, 0, EnumSymbol.NONE, "elitefluid.lava"),
+        paradoxium(0x38E8E5, 14, 2, 1, 0, 50, 100, EnumSymbol.NONE, "elitefluid.antitime"),
+        troll_fluid(0x888888, 15, 1, 1, 50, 50, 50, EnumSymbol.NONE, "elitefluid.trol"),
         egonium(0xD82BFF, 12, 1, 1, 0, 60, 100, EnumSymbol.NONE, "elitefluid.egonium"),
         unstable_plutonium(0x1900FF, 5, 1, 1, 0, 100, 1000, EnumSymbol.RADIATION, "elitefluid.unstablePlutonium"),
-        URANIUM(0x3EC400, 0, 2, 1, 30, 0, 10000, EnumSymbol.RADIATION, "elitefluid.uranium");
+        uranium(0x3EC400, 0, 2, 1, 30, 0, 10000, EnumSymbol.RADIATION, "elitefluid.uranium");
 
         //Approximate HEX Color of the fluid, used for pipe rendering
         private int color;

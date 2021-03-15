@@ -42,7 +42,7 @@ public class ColliderTile extends TileEntity implements IFluidContainer, IFluidA
     public FluidTank tank;
     public ColliderTile() {
         super(Nukesfromthefuture.collider_tile);
-        tank = new FluidTank(FluidHandler.FluidType.BLACK_HOLE_FUEL, 256000, 0);
+        tank = new FluidTank(FluidHandler.FluidType.black_hole_fuel, 256000, 0);
     }
     //I miss being able to use IInventory :(
     public ItemStackHandler iInvReplacement(){
@@ -168,7 +168,7 @@ public class ColliderTile extends TileEntity implements IFluidContainer, IFluidA
 
     @Override
     public void setType(FluidHandler.FluidType type, int index) {
-        tank.setTankType(type.BLACK_HOLE_FUEL);
+        tank.setTankType(type.black_hole_fuel);
     }
 
     @Override

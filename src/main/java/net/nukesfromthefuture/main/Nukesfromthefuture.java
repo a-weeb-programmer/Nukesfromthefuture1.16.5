@@ -9,54 +9,28 @@ import net.minecraft.advancements.*;
 import net.minecraft.advancements.criterion.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.advancements.AdvancementTabGui;
-import net.minecraft.client.gui.advancements.AdvancementsScreen;
-import net.minecraft.client.multiplayer.ClientAdvancementManager;
-import net.minecraft.data.advancements.StoryAdvancements;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.*;
-import net.minecraft.loot.LootEntry;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.LootTables;
-import net.minecraft.loot.LootType;
-import net.minecraft.loot.conditions.KilledByPlayer;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.Tag;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.util.datafix.TypeReferences;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.ToolType;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ObjectHolder;
 import net.nukesfromthefuture.blocks.*;
 import net.nukesfromthefuture.containers.*;
 import net.nukesfromthefuture.entity.*;
 import net.nukesfromthefuture.items.*;
-import net.nukesfromthefuture.packet.PacketDispatcher;
 import net.nukesfromthefuture.tabs.*;
 import net.nukesfromthefuture.tags.NffTags;
-import net.nukesfromthefuture.tileentity.ColliderTile;
-import net.nukesfromthefuture.tileentity.TileBeta;
-import net.nukesfromthefuture.tileentity.TileEgoNuke;
-import net.nukesfromthefuture.tileentity.TileNReactor;
+import net.nukesfromthefuture.tileentity.*;
+import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -247,11 +221,11 @@ public class Nukesfromthefuture {
         iWasteWood = new BlockItem(waste_wood, new Item.Properties().group(resources)).setRegistryName("waste_wood");
         beta_nuke = new Beta(Block.Properties.create(Material.IRON).notSolid().hardnessAndResistance(2.0F, 10.0F).sound(SoundType.METAL)).setRegistryName("beta");
         iBeta_nuke = new BlockItem(beta_nuke, new Item.Properties().group(weapons)).setRegistryName("beta");
-        ego_fluid_identifier = new ItemFluidIdentidier(new Item.Properties().group(resources), FluidHandler.FluidType.egonium).setRegistryName("ego_fluid_identifier");
-        empty_identifier = new ItemFluidIdentidier(new Item.Properties().group(resources), FluidHandler.FluidType.None).setRegistryName("empty_identifier");
+        ego_fluid_identifier = new ItemFluidIdentidier(new Item.Properties().group(resources)).setRegistryName("ego_fluid_identifier");
+        //empty_identifier = new ItemFluidIdentidier(new Item.Properties().group(resources)).setRegistryName("empty_identifier");
         installed = CriteriaTriggers.register(new PositionTrigger(new ResourceLocation(mod_id, "installed_mod")));
         install_mod = Advancement.Builder.builder().withDisplay(new ItemStack(iEgo_nuke), new StringTextComponent("nff_installed"), new StringTextComponent("tanks_for_installing"), new ResourceLocation(mod_id, "textures/blocks/ego_ore.png"), FrameType.TASK, true, true, false).withCriterion("install", new PositionTrigger.Instance(installed.getId(), EntityPredicate.AndPredicate.ANY_AND, LocationPredicate.ANY)).register(Advancement::getCriteria, "nff:things/root");
-        unstable_pluto_identifier = new ItemFluidIdentidier(new Item.Properties().group(resources), FluidHandler.FluidType.unstable_plutonium).setRegistryName("unstable_identifier");
+        //unstable_pluto_identifier = new ItemFluidIdentidier(new Item.Properties().group(resources), FluidHandler.FluidType.unstable_plutonium).setRegistryName("unstable_identifier");
         //ego_tank = new FluidTankItem(FluidHandler.FluidType.egonium, new Item.Properties().group(resources)).setRegistryName("ego_tank");
         //black_hole_tank = new FluidTankItem(FluidHandler.FluidType.BLACK_HOLE_FUEL, new Item.Properties().group(resources)).setRegistryName("black_hole_tank");
         singularity_nuke = new SingularityNuke(Block.Properties.create(Material.IRON).sound(SoundType.ANVIL).hardnessAndResistance(2.0F, 3.0F).notSolid()).setRegistryName("singularity_nuke");
@@ -280,14 +254,7 @@ public class Nukesfromthefuture {
         radiation_death = Advancement.Builder.builder().withDisplay(new ItemStack(iReactor_3), new StringTextComponent("radiation_death"), new StringTextComponent("die_from_radiation"), null, FrameType.CHALLENGE, true, true, true).withCriterion("rad_death_oof", new PositionTrigger.Instance(rad_death.getId(), EntityPredicate.AndPredicate.ANY_AND, LocationPredicate.ANY)).register(Advancement::getCriteria, "nff:things/rad_death");
         tacod = Advancement.Builder.builder().withDisplay(new ItemStack(nuke_taco), new StringTextComponent("tacod"), new StringTextComponent("tacod"), null, FrameType.TASK, true, true, true).withCriterion("taco_bell", new PositionTrigger.Instance(ate_taco.getId(), EntityPredicate.AndPredicate.ANY_AND, LocationPredicate.ANY)).register(Advancement::getCriteria, "nff:things/tacod");
         MinecraftForge.EVENT_BUS.register(new ModEventHandler.Forge_bus());
-        for(int i = 0; i < FluidHandler.FluidType.values().length; i++){
-            ItemStack stack = new ItemStack(fluid_barrel_full);
-            if(fluid_barrel_full.getDefaultInstance().getTag() != null) {
-                FluidContainerRegistry.registerContainer(new FluidContainer(stack, new ItemStack(fluid_barrel_empty), FluidHandler.FluidType.getEnum(stack.getTag().getInt("type")), 16000));
-            }
-        }
         NffTags.register();
-
     }
     public static ItemGroup stuff = new UselessTab("uselessStuff");
     public static ItemGroup weapons = new Weapons("nffweapons");
